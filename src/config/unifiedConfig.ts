@@ -27,8 +27,15 @@ const parseConfig = () => {
     }
 
     // Fix newlines in private key (common issue with .env)
+    // Fix newlines in private key (common issue with .env)
     if (env.GOOGLE_PRIVATE_KEY) {
-        env.GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+        let key = env.GOOGLE_PRIVATE_KEY;
+        // Remove wrapping quotes if present (e.g. "KEY")
+        if (key.startsWith('"') && key.endsWith('"')) {
+            key = key.slice(1, -1);
+        }
+        // Replace literal \n with actual newline
+        env.GOOGLE_PRIVATE_KEY = key.replace(/\\n/g, '\n');
     }
 
     const parsed = configSchema.safeParse(env);
