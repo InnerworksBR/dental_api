@@ -1,0 +1,2280 @@
+{
+  "name": "[AGENT] [Produção]Dra. Priscila",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Divisão de Mensagens ",
+        "height": 440,
+        "width": 1144,
+        "color": 7
+      },
+      "id": "b58554c1-1419-4033-bfcb-69d47c8a4f0f",
+      "name": "Sticky Note19",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        960,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "drapriscila",
+        "options": {}
+      },
+      "id": "9eb4a3fd-e5b9-463c-bdd8-67e5f597558a",
+      "name": "Webhook EVO",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -6144,
+        400
+      ],
+      "webhookId": "aea90a8d-81db-45c5-b6c9-f4174968b85a"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2f74b357-ea21-442a-9fc2-a558966a8e43",
+              "name": "Nome",
+              "value": "={{ $json.body.data.pushName }}",
+              "type": "string"
+            },
+            {
+              "id": "26708c9c-ce53-4f6c-a3ce-437eb2b84920",
+              "name": "Mensagem",
+              "value": "={{ $json.body.data.message.conversation }}",
+              "type": "string"
+            },
+            {
+              "id": "d5ebe46c-8b94-4c4e-90ed-5e8cc6df42bc",
+              "name": "Numero",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "8a438998-f917-4cf3-b89a-bd0dff10e917",
+              "name": "Instancia",
+              "value": "={{ $json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "6db559ec-6c23-4ff5-9c08-7adfc1087ea6",
+              "name": "Numero Formatado",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5936,
+        400
+      ],
+      "id": "4eb017fb-0ed1-4c87-b1a0-de5379b7f662",
+      "name": "Dados"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        496
+      ],
+      "id": "589075d2-c78c-49d0-aaa8-1cab84b52d9e",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1184,
+        496
+      ],
+      "id": "d0f81b29-11b7-4c47-af5a-2507532b0423",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "content": "## Filtro Dados E Configurações Globais\n- agregar dados úteis em um único node\n- Variaveis Globais\n",
+        "height": 360,
+        "width": 524,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -6000,
+        192
+      ],
+      "id": "9128d252-1233-47fe-ad31-1dcd679eec31",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Banco de dados\n- Verifica se o lead existe no Banco de dados\n- Se não existir cria o lead na tabela ",
+        "height": 440,
+        "width": 652,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -4304,
+        192
+      ],
+      "id": "85f3316a-c71d-4bfa-ba54-04846e8921f6",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# Filtro Texto/Audio\n- Filtra se é um audio ou texto\n- Caso seja audio ele faz a transcrição com Open AI",
+        "height": 728,
+        "width": 1268,
+        "color": 4
+      },
+      "id": "6d59745d-0206-4b19-a788-332ae7e7cefc",
+      "name": "Sticky Note14",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -3440,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "68f2163b-37a2-49e6-93d2-1fabb50305d0",
+              "name": "text",
+              "value": "={{ $('Webhook EVO').item.json.body.data.message.conversation }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3136,
+        240
+      ],
+      "id": "90c4a77c-24a1-4980-b401-ed189065ae6a",
+      "name": "text"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "54020458-c901-4bba-8e6d-06e32d80ba5d",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2464,
+        240
+      ],
+      "id": "1507cdda-e707-4764-96ae-5ed0b7dcf729",
+      "name": "finalText"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "=buffer: {{ $('Dados').item.json.Numero }}",
+        "messageData": "={{ $('finalText').item.json.text }}",
+        "tail": true
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        384
+      ],
+      "id": "2fcd5c9b-01e4-455e-b4a9-63d8fe696f96",
+      "name": "push",
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "amount": "=5"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1808,
+        384
+      ],
+      "id": "b6567a9d-1f69-4a81-af29-bc88a0379a9e",
+      "name": "Wait",
+      "webhookId": "e5a5450e-8dff-4913-9150-dbf556b863d6",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "msgs",
+        "key": "=buffer: {{ $('Dados').item.json.Numero }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1648,
+        384
+      ],
+      "id": "4af6ea4e-f2ab-4361-9811-67d0df3d3f22",
+      "name": "msgs",
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "42afc77a-7ce3-48c1-bccf-e26a7b291ad8",
+              "leftValue": "={{ $json.msgs.last() }}",
+              "rightValue": "={{ $('finalText').item.json.text }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -1968,
+        544
+      ],
+      "id": "f210cb00-a0d1-4ba5-b759-d2da00ca8251",
+      "name": "filterBuffer",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "=buffer: {{ $('Dados').item.json.Numero }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1808,
+        544
+      ],
+      "id": "004bd159-fca7-42f6-8a7f-403efc1c1a49",
+      "name": "deleteBuffer",
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# Buffer\n- Espera para juntar mensagens Picotadas",
+        "height": 488,
+        "width": 664,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2080,
+        240
+      ],
+      "id": "df8270c9-0b55-4cde-8177-04d508a23299",
+      "name": "Sticky Note15",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e3bdb73-4771-4318-9ebd-73085f56ae4e",
+              "name": "text",
+              "value": "={{ $('filterBuffer').item.json.msgs.join('\\n') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "={{ false }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1648,
+        544
+      ],
+      "id": "5a9caa88-bfd3-4622-820e-f5d537f51321",
+      "name": "junta_msgs",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4a6d9aac-8565-4c58-abe3-8741393a5535",
+              "leftValue": "={{ $json.telefone }}",
+              "rightValue": "={{ $('Dados').item.json.Numero }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -4064,
+        368
+      ],
+      "id": "e0c0b402-f54a-4569-b135-7efff318acbe",
+      "name": "já_existe_numero"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3f542bcc-2975-4a9a-ac4a-1c1a10c3f194",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        496
+      ],
+      "id": "3a465ebe-2156-413e-aa7c-916112834ed0",
+      "name": "divide_msgs"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1936,
+        480
+      ],
+      "id": "8364be7b-464a-489a-abef-f3c57b8ed9d8",
+      "name": "End"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.innerworks.com.br/mcp/drapriscila/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        432,
+        960
+      ],
+      "id": "8c1b7093-e794-4a63-bee9-850f9f632738",
+      "name": "agendamentos"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=Cancela e remove um evento existente\nda agenda da Dra. Priscila.\n\nEsta ferramenta:\n- remove o evento do Google Calendar\n- libera o horário automaticamente\n\nUse SOMENTE após confirmação explícita\ndo paciente para cancelamento.\n",
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "dra.priscila.odonto.sv@gmail.com",
+          "mode": "list",
+          "cachedResultName": "dra.priscila.odonto.sv@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        608,
+        1984
+      ],
+      "id": "2b4683c7-52cb-4fc5-b18a-a43de77d6a22",
+      "name": "deletar_evento",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "2eBpy849xwvPZuwn",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "drapriscila"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 1,
+      "position": [
+        432,
+        1792
+      ],
+      "id": "9154559d-d84c-4e71-b9d2-e190a1caa138",
+      "name": "MCP Agendamento",
+      "webhookId": "09ad262d-b9dd-459b-839e-808cf7c86547",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "content": "## Agendamento",
+        "height": 448,
+        "width": 800,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        1712
+      ],
+      "typeVersion": 1,
+      "id": "ea1aad9d-d5fb-4ecd-bbff-499c40e4434f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## AGENTE MARCAÇÃO\n\n- Ele conversa\n- CRUD de Consultas",
+        "height": 408,
+        "width": 392,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        368,
+        336
+      ],
+      "id": "feaff70b-3c52-436b-8605-eb760944f14f",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        608
+      ],
+      "id": "1ece8405-03b5-4418-a496-e7e0381ae984"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "instanceName": "={{ $('Dados').item.json.Instancia }}",
+        "remoteJid": "={{ $('Dados').item.json.Numero }}",
+        "messageText": "={{ $json.output }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        560
+      ],
+      "id": "a0b55ac5-561b-4949-b889-0e2ef6fef727",
+      "name": "Enviar texto",
+      "credentials": {
+        "evolutionApi": {
+          "id": "E5bMUkR46xGAW8SR",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "17ea81ae-beb9-4e1c-88de-612ab877a39c",
+              "name": "Bot name",
+              "value": "=Chiara",
+              "type": "string"
+            },
+            {
+              "id": "e5663b09-8a40-4d4e-83dd-9525180190eb",
+              "name": "Tempo de Bloqueio Hands Off",
+              "value": 3600,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5664,
+        400
+      ],
+      "id": "209a6d72-89d0-468c-bf35-78f9a934c265",
+      "name": "Configurações Globais"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ $('Configurações Globais').item.json['Bot name'] }}_{{ $('Webhook EVO').item.json.body.data.key.remoteJid }}_blocked",
+        "value": "true",
+        "expire": true,
+        "ttl": "={{ $('Configurações Globais').item.json['Tempo de Bloqueio Hands Off'] }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -5136,
+        272
+      ],
+      "id": "9c5b16bf-3a48-4b64-97c6-5961ad3512f4",
+      "name": "Chave Block",
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f4380781-2295-4662-a247-7d68ecbdfc7c",
+              "leftValue": "={{ $json.isBlocked }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -4864,
+        496
+      ],
+      "id": "90fb0468-830c-4a8b-b023-245361b42a18",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Hands-Off\n- Caso a Dra. começa a interagir na conversa, o bot para.",
+        "height": 544,
+        "width": 960,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -5376,
+        128
+      ],
+      "id": "888acaf0-780d-4622-8798-f66f4d252b62",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -4688,
+        288
+      ],
+      "id": "f72630e6-c68a-4696-a101-ef38726eba9b",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "content": "## Tools",
+        "height": 192,
+        "width": 624,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        304,
+        912
+      ],
+      "id": "d0b2cb70-6cef-4021-a269-7bcfeb89fb9d",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=Reagenda um evento existente para\numa nova data ou horário.\n\nEsta ferramenta:\n- exige o event_id\n- remove o horário antigo\n- cria o novo bloqueio\n- valida conflitos automaticamente\n\nUse SOMENTE quando o paciente solicitar\nmudança de data ou horário.",
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "dra.priscila.odonto.sv@gmail.com",
+          "mode": "list",
+          "cachedResultName": "dra.priscila.odonto.sv@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        1984
+      ],
+      "id": "a583c0af-a772-4dc7-beb6-c5488a2507e7",
+      "name": "reagendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "2eBpy849xwvPZuwn",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Localiza um evento já existente na agenda\ncom base em informações do paciente.\n\nUsado para:\n- identificar consultas já marcadas\n- obter event_id\n- confirmar dados antes de reagendar\n  ou cancelar\n\nEsta ferramenta NÃO retorna disponibilidade.\n",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "dra.priscila.odonto.sv@gmail.com",
+          "mode": "list",
+          "cachedResultName": "dra.priscila.odonto.sv@gmail.com"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {
+          "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        752,
+        1984
+      ],
+      "id": "e103ae66-6bb6-43ef-8557-39d4048250fa",
+      "name": "procurar_agendamento",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "2eBpy849xwvPZuwn",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "isBlocked",
+        "key": "={{ $('Configurações Globais').item.json['Bot name'] }}_{{ $('Webhook EVO').item.json.body.data.key.remoteJid }}_blocked",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -5136,
+        496
+      ],
+      "id": "645d3825-dd91-4cbd-a066-ed0ff32eee37",
+      "name": "isBlocked?",
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "usuarios",
+          "mode": "list",
+          "cachedResultName": "usuarios"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $('Dados').item.json.Numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -4256,
+        368
+      ],
+      "id": "43a84b16-bb2a-42ec-ab31-ef385d4d7a85",
+      "name": "Verifica se usuario está no banco",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "Kh41s4qK3J6MFCug",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "usuarios",
+          "mode": "list",
+          "cachedResultName": "usuarios"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "telefone": "={{ $('Dados').item.json.Numero }}",
+            "nome": "={{ $('Dados').item.json.Nome }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3824,
+        448
+      ],
+      "id": "5d1457c2-f977-427f-8a46-04a09bb7e34d",
+      "name": "Criar usuario",
+      "credentials": {
+        "postgres": {
+          "id": "Kh41s4qK3J6MFCug",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Usar essa ferramenta caso o paciente declare uma urgencia.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Z1bT6U01ZFteOaY9",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Z1bT6U01ZFteOaY9",
+          "cachedResultName": "[TOOL] Encaminhar Dra. Priscila"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nome', ``, 'string') }}",
+            "telefone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('telefone', ``, 'string') }}",
+            "motivo_da_consulta": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('motivo_da_consulta', ``, 'string') }}",
+            "Plano": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Plano', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "motivo_da_consulta",
+              "displayName": "motivo_da_consulta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Plano",
+              "displayName": "Plano",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        960
+      ],
+      "id": "231c6747-1c85-4dea-bf32-1cf7141087db",
+      "name": "Encaminhar Urgencia"
+    },
+    {
+      "parameters": {
+        "description": "Use essa ferramenta para enviar uma mensagem para o Dra. Tarcilia com as informações de contato do cliente.",
+        "workflowId": {
+          "__rl": true,
+          "value": "GfBZW9gQwVnXCwa3",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/GfBZW9gQwVnXCwa3",
+          "cachedResultName": "[TOOL] Encaminhar Dra. Tarcilia"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nome', ``, 'string') }}",
+            "telefone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('telefone', ``, 'string') }}",
+            "motivo_da_consulta": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('motivo_da_consulta', ``, 'string') }}",
+            "Plano": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Plano', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nome",
+              "displayName": "nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "telefone",
+              "displayName": "telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "motivo_da_consulta",
+              "displayName": "motivo_da_consulta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Plano",
+              "displayName": "Plano",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        960
+      ],
+      "id": "95f87acc-349e-488b-a016-490704f133a5",
+      "name": "Encaminhar Dra. Tarcilia"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('finalText').item.json.text }}",
+        "options": {
+          "systemMessage": "=# PAPEL\nVocê é a {{ $('Configurações Globais').item.json['Bot name'] }}, assistente virtual da Dra. Priscila 🦷✨,\ndentista especializada em odontologia estética e humanizada.\n\nSeu papel é acolher pacientes pelo WhatsApp de forma\nnatural, educada e empática, tirando dúvidas e realizando\nagendamentos diretamente no sistema.\n\nVocê deve ser direta, clara e humana.\nNunca soe como formulário ou robô.\n\nVocê é responsável por conduzir a conversa do início ao fim,\ndecidindo o próximo passo com base no que o paciente responde.\n\n────────────────────────────────\nREGRAS DE CONVERSA (INQUEBRÁVEIS)\n────────────────────────────────\n\n- Faça SEMPRE apenas UMA pergunta por mensagem.\n- Nunca faça perguntas múltiplas.\n- Nunca use listas, numeração ou tópicos.\n- Nunca transforme a conversa em formulário.\n- Nunca repita perguntas já respondidas.\n- Nunca antecipe etapas futuras.\n- Nunca pergunte “agendar, reagendar ou cancelar”.\n- Identifique a intenção do paciente pelo que ele escrever.\n- Use no máximo 1 emoji por mensagem.\n- Seja o mais direta possível, sem perder empatia.\n\nSe o paciente responder várias informações\nem uma única mensagem, aceite tudo silenciosamente\ne faça apenas a próxima pergunta necessária.\n\n────────────────────────────────\nFERRAMENTAS DISPONÍVEIS\n────────────────────────────────\n\n\n🔹 criar eventos  \nUsada para criar um agendamento APENAS após confirmação.\n- O nome do evento deve ser: \"Nome Telefone\"\n  Ex: \"Cristian 13991743380\"\n- Duração: 15 minutos por paciente.\n- Dois pacientes juntos: 30 minutos.\n- Nunca criar evento em horário ocupado.\n- Nunca criar evento sem confirmação explícita.\n\n🔹 atualizar eventos  \nUsada para reagendar uma consulta.\n- Localize o evento usando nome e telefone.\n- Ofereça o próximo horário disponível.\n\n🔹 excluir eventos  \nUsada para cancelar um agendamento.\n\n🔹 enviar_mensagem_dra_priscila  \nUsada em casos de urgência ou dor intensa.\n\n🔹 Encaminhar Dra Tarcilia  \nUsada quando o plano for:\n- Caixa de Saúde de São Vicente\n- Caixa de Pecúlio de São Vicente\n\n🔹 Encaminhar Dra Priscila  \nUsada quando tiver uma urgencia ou precisar falar diretamente com a Dra.\n- Preciso passar nome\n- Motivo\n- Telefone\n- Plano\n\n────────────────────────────────\nREGRAS GERAIS DE AGENDA\n────────────────────────────────\n\n- Atendimento de segunda a sexta.\n- Horário possível: entre 8h e 19h.\n- Primeira marcação: 1h após o início da agenda.\n- Última marcação: 1h antes do fim.\n- A doutora possui escalas variáveis:\n  SEMPRE use listar eventos para validar disponibilidade.\n- Horários devem ser consecutivos e próximos,\n  otimizando a agenda.\n- Nunca inclua EventId em mensagens ao paciente.\n- Datas devem ser apresentadas em formato brasileiro\n  (ex: Quinta, 10/10/2025).\n- Sempre utilize {{$now}} como referência de tempo atual.\n\n────────────────────────────────\nFLUXO DE ATENDIMENTO\n────────────────────────────────\n\n1) Saudação e acolhimento.\n2) Identificação da necessidade do paciente.\n3) Solicitação do nome completo.\n4) Verificação se é plano ou particular.\n5) Validação de plano e regras de cobertura.\n6) Identificação de urgência (se houver).\n7) Pergunta sobre período preferido\n   (manhã, tarde ou noite).\n8) Busca de disponibilidade usando listar eventos.\n9) Oferta de horários exatos disponíveis.\n10) Pedir telefone como confirmação do horário escolhido.\n11) Criação do agendamento.\n12) Finalização com o endereço e horario da consulta.\n\nVocê pode adaptar a ordem APENAS se o paciente\nadiantar informações espontaneamente.\n\n────────────────────────────────\nREGRAS DE PLANO E COBERTURA\n────────────────────────────────\n\nPlanos aceitos:\n- Odontoprev / Bradesco Dental / BB Dental / Previan (Rede UNNA)\n- Unimed Odonto\n- Sulamérica\n- Amil Dental\n- Uniodonto\n- MetLife\n\nPlanos atendidos por outra profissional:\n- Caixa de Saúde de São Vicente\n- Caixa de Pecúlio de São Vicente\n→ Encaminhar para Dra. Tarcilia.\n\nRegras específicas:\n- Prótese: apenas Odontoprev e Sulamérica (pedir foto da carteirinha).\n- Ortodontia: apenas Odontoprev e Sulamérica (pedir foto da carteirinha).\n- Canal em molar: não realizamos.\n- Extração de siso: apenas particular.\n\n────────────────────────────────\nCASOS DE URGÊNCIA\n────────────────────────────────\n\nSe identificar mensagens como:\n“muita dor”, “dente quebrou”, “não aguento”, “urgente”\n\n→ Obrigatório pegar o nome, telefone, motivo e plano, só após isso seguir para o proximo passo.\n→ Sò depois de ter todas as informações necessarias, use enviar_mensagem_dra_priscila com as informações necessarias\n→ Avise o paciente de forma acolhedora, após realizar o encaminha diga que a Doutora ira entrar em contato e encerre a conversa.\n\n────────────────────────────────\nESTILO DE RESPOSTA (EXEMPLOS)\n────────────────────────────────\n\nCorreto:\n“Perfeito 😊 Qual o motivo da sua consulta?”\n\nCorreto:\n“Obrigada, Cristian! Você prefere atendimento pela manhã, à tarde ou à noite?”\n\nIncorreto:\n“Informe nome, motivo e tipo de atendimento.”\n\n────────────────────────────────\nOBJETIVO FINAL\n────────────────────────────────\n\nConduzir o paciente até a solução\nde forma rápida, clara e humana,\nmantendo confiança e acolhimento,\nsem quebrar o fluxo da conversa.\n\n────────────────────────────────\nEndereço\n────────────────────────────────\n\nEndereço:\n📅 Segunda-feira, 17/11/2025 às 08:15\n📍 Benjamin Constant, 61 – sala 1114, Centro, São Vicente/SP”"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        464,
+        496
+      ],
+      "id": "e858715d-324c-4e34-a570-b765af8513ad",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "description": "Calcula disponibilidade real de agenda.\n\nEsta ferramenta:\n- consulta eventos existentes via Google Calendar\n- constrói slots imaginários de 15 minutos\n- identifica horários livres\n- respeita período (manhã/tarde/noite)\n- considera duração da consulta\n- ignora horários ocupados ou bloqueados\n\nEla NÃO cria, altera ou remove eventos.\n\nDeve ser usada SEMPRE que for necessário\nsugerir data ou horário ao paciente.\n\nEntrada esperada obrigatória.:\noutput:{\"status\":\"OK\",\"dia_sugerido\":\"2026-01-15\",\"horario_inicio\":\"13:15\"}",
+        "workflowId": {
+          "__rl": true,
+          "value": "iAX0FgNAV9oZsL5Y",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/iAX0FgNAV9oZsL5Y",
+          "cachedResultName": "Calcular Horários"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "duracao": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('duracao', ``, 'number') }}",
+            "periodo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('periodo', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "periodo",
+              "displayName": "periodo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "duracao",
+              "displayName": "duracao",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        960
+      ],
+      "id": "51cce3e5-0b2a-41bd-81d0-ec814122f5a1",
+      "name": "Disponibilidade"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "send-presence",
+        "instanceName": "={{ $('Dados').item.json.Instancia }}",
+        "remoteJid": "={{ $('Dados').item.json.Numero }}",
+        "delay": 5000
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -1264,
+        544
+      ],
+      "id": "517af58c-a987-4f42-8e7f-dbbb25976d55",
+      "name": "Enviar presen a",
+      "credentials": {
+        "evolutionApi": {
+          "id": "E5bMUkR46xGAW8SR",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "=Cria um novo evento confirmado na agenda\nda Dra. Priscila.\n\nEsta ferramenta:\n- cria o evento no Google Calendar\n- bloqueia o horário informado\n- associa nome e telefone do paciente\n\nDeve ser usada SOMENTE após o paciente\nconfirmar explicitamente o horário\nretornado pela ferramenta de disponibilidade.\n\nEntrada típica:\n\n{\n  \"nome\": \"Nome do paciente + telefone\",\n  \"telefone\": \"Telefone\",\n  \"data\": \"YYYY-MM-DD\",\n  \"horario_inicio\": \"HH:mm\",\n  \"duracao\": number,\n  \"descricao\": \"Motivo da consulta\"\n}\n",
+        "calendar": {
+          "__rl": true,
+          "value": "dra.priscila.odonto.sv@gmail.com",
+          "mode": "list",
+          "cachedResultName": "dra.priscila.odonto.sv@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "attendees": [],
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        1984
+      ],
+      "id": "0c419c34-b1c6-4548-88aa-36a8b7543dbb",
+      "name": "criar_evento",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "2eBpy849xwvPZuwn",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.2",
+          "mode": "list",
+          "cachedResultName": "gpt-5.2"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        624
+      ],
+      "id": "3d9fd746-4d72-4766-b7c5-255a5a9ac05f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "wui8FKmN9Ieayr20",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bd1c9a83-141f-4c81-9bf1-3c19a2773e24",
+              "leftValue": "={{ $('Webhook EVO').item.json.body.data.key.fromMe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -5344,
+        400
+      ],
+      "id": "98ba52b8-0929-4271-9ede-3288b84d7d42",
+      "name": "From me?"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "conversation",
+                    "rightValue": "={{ $('Webhook EVO').item.json.body.data.messageType }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1983cf26-4e20-4c09-93f8-8599a409d23a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "5066134b-8fa2-4402-a577-d9044f89e142",
+                    "leftValue": "audioMessage",
+                    "rightValue": "={{ $('Webhook EVO').item.json.body.data.messageType }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -3392,
+        368
+      ],
+      "id": "c7a8a1b9-fb21-4198-bfed-f6fe2bdf0576",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -2720,
+        480
+      ],
+      "id": "0f8dbac4-2781-4ea0-8246-e12e9feb87e7",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "wui8FKmN9Ieayr20",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data.base64",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -2928,
+        480
+      ],
+      "id": "8296880e-da9e-4a12-bdcd-032a6b44aa15",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "chat-api",
+        "operation": "get-media-base64",
+        "instanceName": "={{ $('Dados').item.json.Instancia }}",
+        "messageId": "={{ $('Webhook EVO').item.json.body.data.key.id }}",
+        "convertToMp4": true
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        -3136,
+        480
+      ],
+      "id": "54ea4196-0d99-4b14-9899-fb74da99c677",
+      "name": "Obter m dia em base64",
+      "credentials": {
+        "evolutionApi": {
+          "id": "E5bMUkR46xGAW8SR",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Mostrar digitando no chat",
+        "height": 240,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1376,
+        464
+      ],
+      "id": "c273ce3c-0d0d-49c0-aa6b-06d4dab424bc",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5c14f291-5c83-4db0-a8f7-14a291a5a685",
+              "leftValue": "={{ $json.propertyName }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -624,
+        336
+      ],
+      "id": "f51c2f14-ebfb-4bf0-93f3-9c7c87d5e76e",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=nome: {{ $json.nome }}\ntelefone: {{ $json.telefone }}\nhorario: {{ $json.horario }}\nid_evento: {{ $json.id_evento }}\nMensagem do cliente: {{ $('finalText').item.json.text }}",
+        "options": {
+          "systemMessage": "# PAPEL\nVocê é a Luna, assistente virtual da Dra. Priscila 🦷✨,\natuando EXCLUSIVAMENTE como agente de CONFIRMAÇÃO de agendamentos.\n\nVocê NÃO cria novos agendamentos.\nVocê NÃO inicia atendimentos.\nVocê NÃO conduz o fluxo principal.\n\nSeu único papel é lidar com:\n- confirmação de um horário já reservado\n- cancelamento de consulta\n- solicitação de reagendamento\n\n────────────────────────────────\nCONTEXTO DE DADOS (REDIS)\n────────────────────────────────\n\nVocê sempre receberá os dados do Redis neste formato:\n\n{\n  nome: string,\n  telefone: string,\n  horario: string,\n  event_id: string\n}\n\nEsses dados representam:\n- um evento já criado na agenda\n- aguardando confirmação do paciente\n\nO Redis é a FONTE DE VERDADE.\nO campo event_id identifica de forma única\no evento na agenda.\n\nNunca presuma dados que não estejam no Redis.\n\n────────────────────────────────\nREGRAS DE COMPORTAMENTO\n────────────────────────────────\n\n- Seja direta, educada e humana.\n- Use frases curtas.\n- Use no máximo 1 emoji por mensagem.\n- Faça no máximo UMA pergunta por mensagem.\n- Nunca use listas ou numeração.\n- Nunca explique regras internas.\n- Nunca peça dados que já estão no Redis.\n\n────────────────────────────────\nINTENÇÕES PERMITIDAS\n────────────────────────────────\n\nVocê só pode lidar com três intenções:\n\n1) CONFIRMAR consulta\n2) CANCELAR consulta\n3) REAGENDAR consulta\n\nQualquer outra intenção deve ser respondida com:\n“Vou te encaminhar para o atendimento 😊”\n\n────────────────────────────────\nFLUXO OBRIGATÓRIO\n────────────────────────────────\n\nNunca ofereça outros horários.\nNunca faça mais de uma pergunta.\n\n────────────────────────────────\nCONFIRMAÇÃO\n────────────────────────────────\n\nSe o paciente confirmar (ex: “sim”, “pode confirmar”):\n\n- Responda confirmando o agendamento.\n- NÃO altere o evento.\n- NÃO cancele o evento.\n- Marque confirmado = true (externamente).\n- Finalize a conversa de forma cordial.\n\nExemplo:\n“Perfeito! Sua consulta está confirmada 😊\nQualquer coisa, estou por aqui.\n\nEndereço:\n📅 Segunda-feira, 17/11/2025 às 08:15\n📍 Benjamin Constant, 61 – sala 1114, Centro, São Vicente/SP”\n\n────────────────────────────────\nCANCELAMENTO\n────────────────────────────────\n\nSe o paciente indicar cancelamento:\n\n- Confirme o cancelamento ao paciente.\n- Use a ferramenta de CANCELAMENTO\n  passando o event_id recebido do Redis.\n- Após cancelar o evento, use a ferramenta\n  para EXCLUIR a chave do Redis.\n- Não ofereça novo horário automaticamente.\n\nExemplo:\n“Tudo bem, cancelei sua consulta 😊\nQuando quiser remarcar, é só me chamar.”\n\n\n────────────────────────────────\nUSO DAS FERRAMENTAS\n────────────────────────────────\n\nVocê possui ferramentas para:\n- cancelar um evento usando event_id\n- excluir a chave do Redis\n\nEssas ferramentas devem ser usadas SOMENTE quando:\n- o paciente cancelar\n- o paciente solicitar reagendamento\n\nNunca mencione Redis, event_id ou ferramentas ao paciente.\n\n────────────────────────────────\nPROIBIÇÕES ABSOLUTAS\n────────────────────────────────\n\nÉ PROIBIDO:\n- criar novos agendamentos\n- sugerir novos horários\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        304,
+        -320
+      ],
+      "id": "076ca8c3-66a2-4eb4-b982-2f4219be0394",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://n8n.innerworks.com.br/mcp/drapriscila/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        80
+      ],
+      "id": "2dc9dde7-1613-429e-88e9-0c23b9ad4038",
+      "name": "agendamentos1"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "=confirmacao:{{ $('Dados').item.json.Numero }}"
+      },
+      "type": "n8n-nodes-base.redisTool",
+      "typeVersion": 1,
+      "position": [
+        432,
+        64
+      ],
+      "id": "b4c14dc5-1e5b-46e5-a9ce-1598f032a431",
+      "name": "Redis2",
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.2",
+          "mode": "list",
+          "cachedResultName": "gpt-5.2"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        -48
+      ],
+      "id": "792c958f-af3f-45eb-9f27-1def749a56e3",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "wui8FKmN9Ieayr20",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const parsed = JSON.parse($input.first().json.propertyName);\n\n// Garantia extra\nreturn [{\n  ...parsed\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        -64
+      ],
+      "id": "5563e31d-ffa1-4e02-9d23-9c80d03ebe83",
+      "name": "Parse Json2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Dados').item.json.Numero }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        32
+      ],
+      "id": "107e3bd8-4cda-4c9d-8f7d-bfb07f4e24cf",
+      "name": "Chat1",
+      "credentials": {
+        "postgres": {
+          "id": "Kh41s4qK3J6MFCug",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.telefone }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        496,
+        672
+      ],
+      "id": "a49232be-6834-422f-9e1f-c2e9381375b3",
+      "name": "Chat",
+      "credentials": {
+        "postgres": {
+          "id": "Kh41s4qK3J6MFCug",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "usuarios",
+          "mode": "list",
+          "cachedResultName": "usuarios"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "telefone",
+              "value": "={{ $('Dados').item.json.Numero }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -416,
+        432
+      ],
+      "id": "cefc2cfd-ff6a-48f2-afb9-4350dcf9220e",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "Kh41s4qK3J6MFCug",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Agente Confirmação de consulta",
+        "height": 752,
+        "width": 1008
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -496
+      ],
+      "id": "95212c99-7835-4d1e-8553-74aad466ae1c",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "=confirmacao:{{ $('Dados').item.json.Numero }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        336
+      ],
+      "id": "1964e50a-964d-43b9-a451-0c8beb7177d7",
+      "name": "Confirmação de consulta?",
+      "alwaysOutputData": true,
+      "credentials": {
+        "redis": {
+          "id": "dmrTIaZGPVX5YyhN",
+          "name": "Redis account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook EVO": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.innerworks.com.br",
+            "user-agent": "axios/1.13.2",
+            "content-length": "1284",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "48.217.234.54",
+            "x-forwarded-host": "n8n.innerworks.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "0c33ca8260a5",
+            "x-real-ip": "48.217.234.54"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "Dr.Priscila",
+            "data": {
+              "key": {
+                "remoteJid": "5513996946185@s.whatsapp.net",
+                "remoteJidAlt": "5513996946185@s.whatsapp.net",
+                "fromMe": false,
+                "id": "AC04EB0CB27A54CB3E7D61886C1F0957",
+                "participant": "",
+                "addressingMode": "lid"
+              },
+              "pushName": "Bira 13",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "conversation": "Sim",
+                "messageContextInfo": {
+                  "threadId": [],
+                  "deviceListMetadata": {
+                    "senderKeyIndexes": [],
+                    "recipientKeyIndexes": [],
+                    "recipientKeyHash": {
+                      "0": 137,
+                      "1": 22,
+                      "2": 43,
+                      "3": 115,
+                      "4": 141,
+                      "5": 27,
+                      "6": 29,
+                      "7": 48,
+                      "8": 135,
+                      "9": 102
+                    },
+                    "recipientTimestamp": {
+                      "low": 1767894938,
+                      "high": 0,
+                      "unsigned": true
+                    }
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": {
+                    "0": 154,
+                    "1": 128,
+                    "2": 125,
+                    "3": 174,
+                    "4": 215,
+                    "5": 206,
+                    "6": 90,
+                    "7": 225,
+                    "8": 142,
+                    "9": 157,
+                    "10": 19,
+                    "11": 224,
+                    "12": 17,
+                    "13": 145,
+                    "14": 31,
+                    "15": 14,
+                    "16": 199,
+                    "17": 67,
+                    "18": 155,
+                    "19": 192,
+                    "20": 155,
+                    "21": 222,
+                    "22": 157,
+                    "23": 70,
+                    "24": 206,
+                    "25": 3,
+                    "26": 5,
+                    "27": 73,
+                    "28": 235,
+                    "29": 145,
+                    "30": 79,
+                    "31": 117
+                  }
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1768173439,
+              "instanceId": "fb343455-37a1-47e3-bd09-3ad31424912b",
+              "source": "android"
+            },
+            "destination": "https://n8n.innerworks.com.br/webhook/drapriscila",
+            "date_time": "2026-01-11T20:17:19.724Z",
+            "sender": "551334686447@s.whatsapp.net",
+            "server_url": "https://evolution.innerworks.com.br",
+            "apikey": "678C6EE26746-4D5D-B2D3-B39A1F1CF477"
+          },
+          "webhookUrl": "https://n8n.innerworks.com.br/webhook/drapriscila",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook EVO": {
+      "main": [
+        [
+          {
+            "node": "Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados": {
+      "main": [
+        [
+          {
+            "node": "Configurações Globais",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "End",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "text": {
+      "main": [
+        [
+          {
+            "node": "finalText",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "finalText": {
+      "main": [
+        [
+          {
+            "node": "push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "push": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "msgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "msgs": {
+      "main": [
+        [
+          {
+            "node": "filterBuffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filterBuffer": {
+      "main": [
+        [
+          {
+            "node": "deleteBuffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deleteBuffer": {
+      "main": [
+        [
+          {
+            "node": "junta_msgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "junta_msgs": {
+      "main": [
+        [
+          {
+            "node": "Enviar presen a",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "já_existe_numero": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "divide_msgs": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "agendamentos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deletar_evento": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar texto": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configurações Globais": {
+      "main": [
+        [
+          {
+            "node": "From me?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Verifica se usuario está no banco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reagendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "procurar_agendamento": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isBlocked?": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica se usuario está no banco": {
+      "main": [
+        [
+          {
+            "node": "já_existe_numero",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar usuario": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "divide_msgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disponibilidade": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar presen a": {
+      "main": [
+        [
+          {
+            "node": "Confirmação de consulta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "criar_evento": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Agendamento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "From me?": {
+      "main": [
+        [
+          {
+            "node": "Chave Block",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "isBlocked?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Obter m dia em base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obter m dia em base64": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "finalText",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Parse Json2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "agendamentos1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis2": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Json2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "divide_msgs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encaminhar Dra. Tarcilia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encaminhar Urgencia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmação de consulta?": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "805c0a93-68ab-4b69-a3ec-d9ffc066cdf9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b2dceef4e2144178b26ff7815fa420903676f39f25884f35554dd547445ec4b2"
+  },
+  "id": "21gT9aHMn1o0fh67H6-tf",
+  "tags": [
+    {
+      "updatedAt": "2026-01-06T13:46:06.128Z",
+      "createdAt": "2026-01-06T13:46:06.128Z",
+      "id": "TO96gItXQP1rDWf1",
+      "name": "Cristian"
+    }
+  ]
+}
