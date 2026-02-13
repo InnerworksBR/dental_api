@@ -153,7 +153,7 @@ export class CalendarService {
      * @param period 'manhã' | 'tarde' | 'noite' (optional)
      * @returns Object with date and slots, or null if none found.
      */
-    async findNextAvailable(period?: string, afterDate?: string): Promise<{ date: string, slots: string[] } | null> {
+    async findNextAvailable(period?: string, afterDate?: string, preferredTime?: string): Promise<{ date: string, slots: string[] } | null> {
         let currentDate = DateUtils.getMinimumSchedulingDate();
 
         // If afterDate is provided, start searching from the day AFTER that date
@@ -175,10 +175,35 @@ export class CalendarService {
             const slots = await this.getAvailableSlotsForDay(currentDate, period);
 
             if (slots && slots.length > 0) {
-                return {
-                    date: currentDate.toFormat('yyyy-MM-dd'),
-                    slots: slots
-                };
+                // If preferredTime is requested, we ONLY return this day if it has that time (or close to it)
+                if (preferredTime) {
+                    const prefHour = parseInt(preferredTime.split(':')[0]);
+                    // Check if any slot has the same hour
+                    const hasMatchingSlot = slots.some(s => parseInt(s.split(':')[0]) === prefHour);
+
+                    if (hasMatchingSlot) {
+                        // Return specifically the slots around that time? Or all slots?
+                        // Let's returns all slots for the day, but we know it contains the preferred one.
+                        // Ideally we filter the display to focus on the preferred ones first?
+                        // The tool will slice(0,2), so maybe we should sort?
+                        // For now, simple existence check is enough to satisfy "Find NEXT available day with 17h".
+
+                        // Let's filter the slots returned to match preference first
+                        const goodSlots = slots.filter(s => parseInt(s.split(':')[0]) === prefHour);
+                        const otherSlots = slots.filter(s => parseInt(s.split(':')[0]) !== prefHour);
+
+                        return {
+                            date: currentDate.toFormat('yyyy-MM-dd'),
+                            slots: [...goodSlots, ...otherSlots]
+                        };
+                    }
+                    // If not found, SKIP this day and continue loop
+                } else {
+                    return {
+                        date: currentDate.toFormat('yyyy-MM-dd'),
+                        slots: slots
+                    };
+                }
             }
 
             // Move to next day

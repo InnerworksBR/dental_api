@@ -9,12 +9,13 @@ import { DateTime } from 'luxon';
 
 export const checkAvailabilityTool = new DynamicTool({
     name: 'check_availability',
-    description: 'Verifies available appointment slots. Input should be a JSON string with optional "period" (manhã, tarde, noite), "date" (YYYY-MM-DD) to check specific day, or "afterDate" (YYYY-MM-DD) to find next available day AFTER this date. Example: {"period": "manhã", "afterDate": "2026-02-25"}',
+    description: 'Verifies available appointment slots. Input should be a JSON string with optional "period" (manhã, tarde, noite), "date" (YYYY-MM-DD) to check specific day, "afterDate" (YYYY-MM-DD) to find next available day AFTER this date, or "preferredTime" (HH:mm) to search for a specific time across days. Example: {"period": "manhã", "afterDate": "2026-02-25", "preferredTime": "17:00"}',
     func: async (input: string) => {
         try {
             let period = undefined;
             let dateStr = undefined;
             let afterDateStr = undefined;
+            let preferredTime = undefined;
 
             if (input && input.trim() !== '') {
                 try {
@@ -22,6 +23,7 @@ export const checkAvailabilityTool = new DynamicTool({
                     period = parsed.period;
                     dateStr = parsed.date;
                     afterDateStr = parsed.afterDate;
+                    preferredTime = parsed.preferredTime;
                 } catch (e) {
                     // unexpected input...
                     period = input;
@@ -46,16 +48,25 @@ export const checkAvailabilityTool = new DynamicTool({
                     return `Não há horários disponíveis para o dia ${requestedDate.toFormat('dd/MM/yyyy')}${period ? ` (${period})` : ''}.`;
                 }
 
+                // If preferredTime is asked for specific date, check if it exists
+                if (preferredTime) {
+                    const prefHourRequest = parseInt(preferredTime.split(':')[0]);
+                    const hasSlot = slots.some(s => parseInt(s.split(':')[0]) === prefHourRequest);
+                    if (!hasSlot) {
+                        return `Para o dia ${requestedDate.toFormat('dd/MM/yyyy')}, não temos horários próximos às ${preferredTime}. Temos: ${slots.slice(0, 5).join(', ')}.`;
+                    }
+                }
+
                 // Return slots (limit to 5 to be generous but not spammy if specific date asked)
                 const limited = slots.slice(0, 5);
                 return `Horários disponíveis para ${requestedDate.toFormat('dd/MM/yyyy')}:\n${limited.join('\n')}`;
             }
 
             // NEXT AVAILABLE CHECK (Default)
-            const result = await calendarService.findNextAvailable(period, afterDateStr);
+            const result = await calendarService.findNextAvailable(period, afterDateStr, preferredTime);
 
             if (!result || result.slots.length === 0) {
-                return 'Não encontrei horários disponíveis nos próximos 14 dias para esse período.';
+                return `Não encontrei horários disponíveis nos próximos 14 dias para esse período${preferredTime ? ` (aprox. ${preferredTime})` : ''}.`;
             }
 
             // Return first 2 slots
