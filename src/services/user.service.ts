@@ -19,9 +19,41 @@ export class UserService {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 phone TEXT UNIQUE NOT NULL,
                 name TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                last_human_interaction DATETIME
             )
         `);
+        // Simple migration check (idempotent)
+        try {
+            db.exec('ALTER TABLE users ADD COLUMN last_human_interaction DATETIME');
+        } catch (e) {
+            // Column likely exists, ignore
+        }
+    }
+
+    /**
+     * Updates the last human interaction timestamp for a user.
+     */
+    setLastHumanInteraction(phone: string): void {
+        const now = new Date().toISOString();
+        const stmt = db.prepare('UPDATE users SET last_human_interaction = ? WHERE phone = ?');
+        stmt.run(now, phone);
+
+        // Ensure user exists (upsert without name change if missing)
+        const check = db.prepare('SELECT phone FROM users WHERE phone = ?').get(phone);
+        if (!check) {
+            this.createUser(phone, '');
+            stmt.run(now, phone); // Re-run update
+        }
+    }
+
+    /**
+     * Gets the last human interaction timestamp.
+     */
+    getLastHumanInteraction(phone: string): string | null {
+        const stmt = db.prepare('SELECT last_human_interaction FROM users WHERE phone = ?');
+        const res = stmt.get(phone) as { last_human_interaction: string } | undefined;
+        return res ? res.last_human_interaction : null;
     }
 
     /**

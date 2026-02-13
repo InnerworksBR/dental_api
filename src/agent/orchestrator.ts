@@ -51,6 +51,20 @@ export class AgentOrchestrator {
             user = userService.findUserByPhone(phone);
         }
 
+        // 2.5 HUMAN INTERACTION CHECK (Hands-off)
+        // If the doctor interacted recently (last 3 hours), pause the AI.
+        const lastInteraction = userService.getLastHumanInteraction(phone);
+        if (lastInteraction) {
+            const lastTime = DateTime.fromISO(lastInteraction).setZone('America/Sao_Paulo');
+            const now = DateTime.now().setZone('America/Sao_Paulo');
+            const diffInHours = now.diff(lastTime, 'hours').hours;
+
+            if (diffInHours < 3) {
+                console.log(`⏸️ AI Paused for ${phone}. Human replied ${diffInHours.toFixed(1)}h ago. (Window: 3h)`);
+                return;
+            }
+        }
+
         // 3. Save User Message
         messageRepo.saveMessage(remoteJid, 'user', userText);
 

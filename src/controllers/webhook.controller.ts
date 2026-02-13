@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { orchestrator } from '../agent/orchestrator';
+import { userService } from '../services/user.service';
 
 export class WebhookController {
     static async handleWebhook(req: FastifyRequest, reply: FastifyReply) {
@@ -15,8 +16,15 @@ export class WebhookController {
             const remoteJid = messageData.key.remoteJid;
             const fromMe = messageData.key.fromMe;
 
-            // Ignore own messages
-            if (fromMe) return;
+            // Ignore own messages (but track human interaction)
+            if (fromMe) {
+                if (remoteJid) {
+                    const phone = remoteJid.replace(/\D/g, '');
+                    console.log(`👤 Human Interaction detected for ${phone}. Pausing AI for 3 hours.`);
+                    userService.setLastHumanInteraction(phone);
+                }
+                return;
+            }
 
             // Extract content
             let text = '';
