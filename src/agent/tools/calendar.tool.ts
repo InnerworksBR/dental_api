@@ -172,7 +172,7 @@ export const getAppointmentsTool = new DynamicTool({
                 return 'Nenhum agendamento futuro encontrado para este número.';
             }
 
-            return `Agendamento encontrado:\nData: ${new Date(apptData.start).toLocaleString('pt-BR')}\nID do Evento: ${apptData.id}`;
+            return `Agendamento encontrado: "${apptData.summary}"\nData: ${new Date(apptData.start).toLocaleString('pt-BR')}\nID do Evento: ${apptData.id}`;
         } catch (error) {
             return 'Erro ao buscar agendamentos.';
         }

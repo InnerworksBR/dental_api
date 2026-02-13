@@ -166,7 +166,10 @@ ANTES de executar cancelamento/remarcação, PEÇA CONFIRMAÇÃO EXPLÍCITA.
 2) Para REMARCAR:
    ⚠️ ATENÇÃO: NUNCA use 'cancel_appointment' se o objetivo é REMARCAR. Use 'reschedule_appointment' DIRETO.
    O 'reschedule_appointment' já cuida de tudo. NÃO cancele primeiro.
-   a) Pergunte: "Seria para o mesmo período (manhã/tarde/noite) ou prefere outro?"
+   a) Identifique o período do agendamento ATUAL (Manhã/Tarde/Noite).
+   b) Pergunte: "Você prefere manter no período da [PERÍODO_ATUAL]?" (Isso evita confusão com "Sim").
+   c) Se o usuário disser "Sim" ou "Mesmo horário", busque disponibilidade nesse período.
+   d) Se disser "Não" ou "Mudar", pergunte qual período prefere.
    b) Baseado na resposta, busque disponibilidade (check_availability).
       - Use 'afterDate' se necessário.
    c) Ofereça o horário e AGUARDE O ACEITE.

@@ -74,9 +74,24 @@ export class CalendarService {
             const p = period.toLowerCase();
             slots = slots.filter(slot => {
                 const hour = slot.hour;
+                const minute = slot.minute;
+
                 if (p.includes('manh') || p.includes('dia')) return hour < 12;
-                if (p.includes('tard')) return hour >= 12 && hour < 18;
-                if (p.includes('noit')) return hour >= 18;
+
+                if (p.includes('tard')) {
+                    // Afternoon: 12:00 to 17:30 (exclusive of 17:30)
+                    return hour >= 12 && (hour < 17 || (hour === 17 && minute < 30));
+                }
+
+                if (p.includes('noit')) {
+                    // Night: 17:30 to 19:30 (inclusive of 19:30 start?)
+                    // Let's assume 17:30 up to 19:30 start time.
+                    // 17:30, 17:45, 18:00 ... 19:30
+                    const isAfterStart = (hour > 17) || (hour === 17 && minute >= 30);
+                    const isBeforeEnd = (hour < 19) || (hour === 19 && minute <= 30);
+                    return isAfterStart && isBeforeEnd;
+                }
+
                 return true;
             });
         }
