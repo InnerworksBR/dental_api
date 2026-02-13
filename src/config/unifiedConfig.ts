@@ -26,6 +26,11 @@ const parseConfig = () => {
         env.GOOGLE_CLIENT_EMAIL = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
     }
 
+    // Fix newlines in private key (common issue with .env)
+    if (env.GOOGLE_PRIVATE_KEY) {
+        env.GOOGLE_PRIVATE_KEY = env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+    }
+
     const parsed = configSchema.safeParse(env);
     if (!parsed.success) {
         console.error('❌ Invalid environment variables:', parsed.error.format());
