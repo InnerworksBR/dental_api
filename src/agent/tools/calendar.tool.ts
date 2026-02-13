@@ -102,9 +102,12 @@ export const scheduleAppointmentTool = new DynamicTool({
             // This ensures we save the client's name for future interactions
             userService.createUser(phone, data.name || 'Cliente');
 
+            // Format phone for display (Remove 55 country code if present)
+            const displayPhone = phone.startsWith('55') && phone.length > 10 ? phone.substring(2) : phone;
+
             // 2. Create in Google Calendar
             const event = await calendarService.createEvent({
-                summary: `${data.name || 'Cliente'} ${phone}`,
+                summary: `${data.name || 'Cliente'} ${displayPhone}`,
                 description: data.summary,
                 start: { dateTime: start.toISOString() },
                 end: { dateTime: end.toISOString() },
