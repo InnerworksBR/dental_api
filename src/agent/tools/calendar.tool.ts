@@ -94,8 +94,11 @@ export const scheduleAppointmentTool = new DynamicTool({
                 } catch (e) { }
             }
 
-            const start = new Date(data.datetime);
-            const end = new Date(start.getTime() + 15 * 60000); // 15 min duration
+            const start = DateTime.fromISO(data.datetime, { zone: 'America/Sao_Paulo' });
+            if (!start.isValid) {
+                return 'Data/hora inválida. Use o formato ISO (ex: YYYY-MM-DDTHH:mm:ss).';
+            }
+            const end = start.plus({ minutes: 15 }); // 15 min duration
             const phone = (data.phone || '').replace(/\D/g, ''); // Sanitize phone
 
             if (!phone) {
@@ -104,7 +107,7 @@ export const scheduleAppointmentTool = new DynamicTool({
 
             // D+2 Validation
             const minDate = DateUtils.getMinimumSchedulingDate();
-            if (start < minDate.toJSDate()) {
+            if (start < minDate.startOf('day')) {
                 const formattedMin = DateUtils.formatToWhatsApp(minDate);
                 return `Agendamento não permitido. Só é possível agendar com 2 dias úteis de antecedência (a partir de ${formattedMin}). Por favor, escolha outra data.`;
             }
@@ -120,16 +123,16 @@ export const scheduleAppointmentTool = new DynamicTool({
             const event = await calendarService.createEvent({
                 summary: `${data.name || 'Cliente'} ${displayPhone}`,
                 description: data.summary,
-                start: { dateTime: start.toISOString() },
-                end: { dateTime: end.toISOString() },
+                start: { dateTime: start.toISO() },
+                end: { dateTime: end.toISO() },
             });
 
-            // 2. Save to Local DB (Persistence)
+            // 3. Save to Local DB (Persistence)
             if (event.id) {
-                appointmentService.createAppointment(phone, event.id, start.toISOString(), data.summary);
+                appointmentService.createAppointment(phone, event.id, start.toISO()!, data.summary);
             }
 
-            return `Agendamento realizado com sucesso para ${start.toLocaleString('pt-BR')}! ID: ${event.id}`;
+            return `Agendamento realizado com sucesso para ${start.setLocale('pt-BR').toFormat('dd/MM/yyyy HH:mm')}! ID: ${event.id}`;
         } catch (error) {
             console.error('Schedule error:', error);
             return 'Falha ao realizar agendamento. Verifique os dados (data/hora).';
@@ -396,23 +399,26 @@ export const rescheduleAppointmentTool = new DynamicTool({
             }
 
             // Google Update
-            const start = new Date(newDateTime);
+            const start = DateTime.fromISO(newDateTime, { zone: 'America/Sao_Paulo' });
+            if (!start.isValid) {
+                return 'Data/hora inválida para remarcação.';
+            }
 
             // D+2 Validation
             const minDate = DateUtils.getMinimumSchedulingDate();
-            if (start < minDate.toJSDate()) {
+            if (start < minDate.startOf('day')) {
                 const formattedMin = DateUtils.formatToWhatsApp(minDate);
                 return `Remarcação não permitida para esta data. Só é possível agendar com 2 dias úteis de antecedência (a partir de ${formattedMin}). Por favor, escolha outra data.`;
             }
 
-            await calendarService.updateEventTime(eventId, start.toISOString());
+            await calendarService.updateEventTime(eventId, start.toISO()!);
 
             // Local DB Update (Try to update if exists, otherwise ignore)
             try {
-                appointmentService.updateAppointmentTime(eventId, start.toISOString());
+                appointmentService.updateAppointmentTime(eventId, start.toISO()!);
             } catch (e) { }
 
-            return `Agendamento remarcado com sucesso para ${start.toLocaleString('pt-BR')}!`;
+            return `Agendamento remarcado com sucesso para ${start.setLocale('pt-BR').toFormat('dd/MM/yyyy HH:mm')}!`;
         } catch (error) {
             console.error('Reschedule error:', error);
             return 'Erro ao remarcar agendamento.';

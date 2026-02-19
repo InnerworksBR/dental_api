@@ -327,7 +327,9 @@ export class CalendarService {
 
             if (!event.data) throw new Error('Event not found');
 
-            const start = DateTime.fromISO(newStart);
+            const start = DateTime.fromISO(newStart, { zone: 'America/Sao_Paulo' });
+            if (!start.isValid) throw new Error('Invalid start date for update');
+
             const end = start.plus({ minutes: 15 });
 
             const res = await this.calendar.events.patch({
